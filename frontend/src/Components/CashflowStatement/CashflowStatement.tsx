@@ -3,6 +3,7 @@ import { useOutletContext } from "react-router-dom";
 import { CompanyCashFlow } from "../../company";
 import { getCashFlow } from "../../api";
 import Table from "../Table/Table";
+import { formatLargeMonetaryNumber } from "../../Helpers/NumberFormatting";
 import Spinner from "../Spinner/Spinner";
 
 type Props = {};
@@ -14,31 +15,43 @@ const config = [
   },
   {
     label: "Operating Cashflow",
-    render: (company: CompanyCashFlow) => company.operatingCashFlow,
-  },
-  {
-    label: "Property/Machinery Cashflow",
     render: (company: CompanyCashFlow) =>
-      company.investmentsInPropertyPlantAndEquipment,
+      formatLargeMonetaryNumber(company.operatingCashFlow),
   },
   {
-    label: "Other Investing Cashflow",
-    render: (company: CompanyCashFlow) => company.otherInvestingActivites,
-  },
-  {
-    label: "Debt Cashflow",
+    label: "Investing Cashflow",
     render: (company: CompanyCashFlow) =>
-      company.netCashUsedProvidedByFinancingActivities,
+      formatLargeMonetaryNumber(company.netCashUsedForInvestingActivites),
+  },
+  {
+    label: "Financing Cashflow",
+    render: (company: CompanyCashFlow) =>
+      formatLargeMonetaryNumber(
+        company.netCashUsedProvidedByFinancingActivities
+      ),
+  },
+  {
+    label: "Cash At End of Period",
+    render: (company: CompanyCashFlow) =>
+      formatLargeMonetaryNumber(company.cashAtEndOfPeriod),
   },
   {
     label: "CapEX",
-    render: (company: CompanyCashFlow) => company.capitalExpenditure,
+    render: (company: CompanyCashFlow) =>
+      formatLargeMonetaryNumber(company.capitalExpenditure),
+  },
+  {
+    label: "Issuance Of Stock",
+    render: (company: CompanyCashFlow) =>
+      formatLargeMonetaryNumber(company.commonStockIssued),
   },
   {
     label: "Free Cash Flow",
-    render: (company: CompanyCashFlow) => company.freeCashFlow,
+    render: (company: CompanyCashFlow) =>
+      formatLargeMonetaryNumber(company.freeCashFlow),
   },
 ];
+
 const CashflowStatement = (props: Props) => {
   const ticker = useOutletContext<string>();
   const [cashFlowData, setCashFlowData] = useState<CompanyCashFlow[]>();
@@ -55,5 +68,4 @@ const CashflowStatement = (props: Props) => {
     <Spinner />
   );
 };
-
 export default CashflowStatement;

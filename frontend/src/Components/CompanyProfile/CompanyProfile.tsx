@@ -1,61 +1,104 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import Table from "../Table/Table";
-import { CompanyIncomeStatement } from "../../company";
-import { getIncomeStatement } from "../../api";
+import { CompanyKeyMetrics } from "../../company";
+import { getKeyMetrics } from "../../api";
+import RatioList from "../RatioList/RatioList";
+import {
+  formatLargeNonMonetaryNumber,
+  formatRatio,
+} from "../../Helpers/NumberFormatting";
 import Spinner from "../Spinner/Spinner";
 
 type Props = {};
 
-const configs = [
+const tableConfig = [
   {
-    label: "Date",
-    render: (company: CompanyIncomeStatement) => company.date,
+    label: "Market Cap",
+    render: (company: CompanyKeyMetrics) =>
+      formatLargeNonMonetaryNumber(company.marketCapTTM),
+    subTitle: "Total value of all a company's shares of stock",
   },
   {
-    label: "Total Revenue",
-    render: (company: CompanyIncomeStatement) => company.revenue,
+    label: "Current Ratio",
+    render: (company: CompanyKeyMetrics) =>
+      formatRatio(company.currentRatioTTM),
+    subTitle:
+      "Measures the companies ability to pay short term debt obligations",
   },
   {
-    label: "Cost Of Revenue",
-    render: (company: CompanyIncomeStatement) => company.costOfRevenue,
+    label: "Return On Equity",
+    render: (company: CompanyKeyMetrics) => formatRatio(company.roeTTM),
+    subTitle:
+      "Return on equity is the measure of a company's net income divided by its shareholder's equity",
   },
   {
-    label: "Operating Expenses",
-    render: (company: CompanyIncomeStatement) => company.operatingExpenses,
+    label: "Return On Assets",
+    render: (company: CompanyKeyMetrics) =>
+      formatRatio(company.returnOnTangibleAssetsTTM),
+    subTitle:
+      "Return on assets is the measure of how effective a company is using its assets",
   },
   {
-    label: "Gross Profit",
-    render: (company: CompanyIncomeStatement) => company.grossProfit,
+    label: "Free Cashflow Per Share",
+    render: (company: CompanyKeyMetrics) =>
+      formatRatio(company.freeCashFlowPerShareTTM),
+    subTitle:
+      "Return on assets is the measure of how effective a company is using its assets",
   },
   {
-    label: "Income Before Tax",
-    render: (company: CompanyIncomeStatement) => company.incomeBeforeTax,
+    label: "Book Value Per Share TTM",
+    render: (company: CompanyKeyMetrics) =>
+      formatRatio(company.bookValuePerShareTTM),
+    subTitle:
+      "Book value per share indicates a firm's net asset value (total assets - total liabilities) on per share basis",
   },
   {
-    label: "Operating Income",
-    render: (company: CompanyIncomeStatement) => company.operatingIncome,
+    label: "Divdend Yield TTM",
+    render: (company: CompanyKeyMetrics) =>
+      formatRatio(company.dividendYieldTTM),
+    subTitle: "Shows how much a company pays each year relative to stock price",
+  },
+  {
+    label: "Capex Per Share TTM",
+    render: (company: CompanyKeyMetrics) =>
+      formatRatio(company.capexPerShareTTM),
+    subTitle:
+      "Capex is used by a company to aquire, upgrade, and maintain physical assets",
+  },
+  {
+    label: "Graham Number",
+    render: (company: CompanyKeyMetrics) =>
+      formatRatio(company.grahamNumberTTM),
+    subTitle:
+      "This is the upperbouind of the price range that a defensive investor should pay for a stock",
+  },
+  {
+    label: "PE Ratio",
+    render: (company: CompanyKeyMetrics) => formatRatio(company.peRatioTTM),
+    subTitle:
+      "This is the upperbouind of the price range that a defensive investor should pay for a stock",
   },
 ];
-const IncomeStatement = (props: Props) => {
+const CompanyProfile = (props: Props) => {
   const ticker = useOutletContext<string>();
-  const [incomeStatement, setIncomeStatement] =
-    useState<CompanyIncomeStatement[]>();
+  const [companyData, setCompanyData] = useState<CompanyKeyMetrics>();
   useEffect(() => {
-    const getRatios = async () => {
-      const result = await getIncomeStatement(ticker!);
-      setIncomeStatement(result!.data);
+    const getCompanyKeyRatios = async () => {
+      const value = await getKeyMetrics(ticker);
+      setCompanyData(value?.data[0]);
     };
-    getRatios();
+    getCompanyKeyRatios();
   }, []);
   return (
     <>
-      {incomeStatement ? (
-        <Table config={configs} data={incomeStatement} />
+      {companyData ? (
+        <>
+          <RatioList config={tableConfig} data={companyData} />
+        </>
       ) : (
         <Spinner />
       )}
     </>
   );
 };
-export default IncomeStatement;
+export default CompanyProfile;
