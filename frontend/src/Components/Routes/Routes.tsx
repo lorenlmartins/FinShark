@@ -3,7 +3,7 @@ import App from "../../App";
 import CompanyPage from "../../Pages/CompanyPage/CompanyPage";
 import HomePage from "../../Pages/HomePage/HomePage";
 import SearchPage from "../../Pages/SearchPage/SearchPage";
-import DesignPage from "../../Pages/DesignPage/DesignPage";
+import DesignPage from "../../Pages/DesignGuide/DesignGuide";
 import CompanyProfile from "../CompanyProfile/CompanyProfile";
 import IncomeStatement from "../IncomeStatement/IncomeStatement";
 
