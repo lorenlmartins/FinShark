@@ -1,11 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../../App";
 import CompanyPage from "../../Pages/CompanyPage/CompanyPage";
+import DesignGuide from "../../Pages/DesignGuide/DesignGuide";
 import HomePage from "../../Pages/HomePage/HomePage";
 import SearchPage from "../../Pages/SearchPage/SearchPage";
-import DesignPage from "../../Pages/DesignGuide/DesignGuide";
 import CompanyProfile from "../CompanyProfile/CompanyProfile";
 import IncomeStatement from "../IncomeStatement/IncomeStatement";
+import BalanceSheet from "../BalanceSheet/BalanceSheet";
 
 export const router = createBrowserRouter([
   {
@@ -14,13 +15,14 @@ export const router = createBrowserRouter([
     children: [
       { path: "", element: <HomePage /> },
       { path: "search", element: <SearchPage /> },
-      { path: "design-guide", element: <DesignPage /> },
+      { path: "design-guide", element: <DesignGuide /> },
       {
         path: "company/:ticker",
         element: <CompanyPage />,
         children: [
           { path: "company-profile", element: <CompanyProfile /> },
           { path: "income-statement", element: <IncomeStatement /> },
+          { path: "balance-sheet", element: <BalanceSheet /> },
         ],
       },
     ],
