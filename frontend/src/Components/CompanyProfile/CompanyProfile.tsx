@@ -7,6 +7,7 @@ import {
   formatLargeNonMonetaryNumber,
   formatRatio,
 } from "../../Helpers/NumberFormatting";
+import StockComment from "../StockComment/StockComment";
 import Spinner from "../Spinner/Spinner";
 
 type Props = {};
@@ -79,6 +80,7 @@ const tableConfig = [
       "This is the upperbouind of the price range that a defensive investor should pay for a stock",
   },
 ];
+
 const CompanyProfile = (props: Props) => {
   const ticker = useOutletContext<string>();
   const [companyData, setCompanyData] = useState<CompanyKeyMetrics>();
@@ -94,6 +96,7 @@ const CompanyProfile = (props: Props) => {
       {companyData ? (
         <>
           <RatioList config={tableConfig} data={companyData} />
+          <StockComment stockSymbol={ticker} />
         </>
       ) : (
         <Spinner />
@@ -101,4 +104,5 @@ const CompanyProfile = (props: Props) => {
     </>
   );
 };
+
 export default CompanyProfile;
